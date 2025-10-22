@@ -25,7 +25,7 @@ vim.pack.add({
 	{ src = "https://github.com/echasnovski/mini.extra" },
 	{ src = "https://github.com/echasnovski/mini.pairs" },
 
-	{ src = "https://github.com/folke/lazydev.nvim", ft = "lua" },
+	{ src = "https://github.com/folke/lazydev.nvim",             ft = "lua" },
 	{ src = "https://github.com/mason-org/mason-lspconfig.nvim" },
 	{ src = "https://github.com/mason-org/mason.nvim" },
 	{ src = "https://github.com/neovim/nvim-lspconfig" },
@@ -34,14 +34,14 @@ vim.pack.add({
 	{ src = "https://github.com/nvim-lua/plenary.nvim" },
 	{ src = "https://github.com/nvim-treesitter/nvim-treesitter" },
 	{ src = "https://github.com/stevearc/oil.nvim" },
-	{ src = "https://github.com/vague2k/vague.nvim", name = "vague" },
+	{ src = "https://github.com/vague2k/vague.nvim",             name = "vague" },
 })
 
 local null_ls = require("null-ls")
 null_ls.setup({
-    sources = {
-        null_ls.builtins.formatting.black,
-    }
+	sources = {
+		null_ls.builtins.formatting.black,
+	}
 })
 
 require "vague".setup {
@@ -62,53 +62,53 @@ require "oil".setup()
 
 local treesitter_ok, treesitter_configs = pcall(require, "nvim-treesitter.configs")
 if treesitter_ok then
-    treesitter_configs.setup {
-        ensure_installed = { "c", "cpp", "lua", "python", "typescript",
-            "vim", "rust", "vue", "sql", "html", "css", "bash" },
-        sync_install = true,
-        ignore_install = {},
-        auto_install = true,
-        highlight = {
-            enable = true,
-        },
-        modules = {},
-        rainbow = {
-            enable = true,
-            extended_mode = true,
-            max_file_lines = 10000,
-        }
-    }
+	treesitter_configs.setup {
+		ensure_installed = { "c", "cpp", "lua", "python", "typescript",
+			"vim", "rust", "vue", "sql", "html", "css", "bash" },
+		sync_install = true,
+		ignore_install = {},
+		auto_install = true,
+		highlight = {
+			enable = true,
+		},
+		modules = {},
+		rainbow = {
+			enable = true,
+			extended_mode = true,
+			max_file_lines = 10000,
+		}
+	}
 end
 
 -- lsp
-vim.lsp.enable({ "lua_ls", "basedpyright" })
+vim.lsp.enable({ "lua_ls", "basedpyright", "rust_analyzer" })
 
 vim.lsp.config("basedpyright", {
-    settings = {
-        basedpyright = {
-            analysis = {
-                diagnosticSeverityOverrides = {
-                    reportUnknownParameterType = false,
-                    reportUnknownVariableType = false,
-                    reportUnknownLambdaType = false,
-                    reportUnknownMemberType = false,
-                    reportUnknownArgumentType = false,
-                    reportMissingParameterType = false,
-                    reportUnusedCallResult = false,
-                    reportAny = false,
-                }
-            }
-        }
-    }
+	settings = {
+		basedpyright = {
+			analysis = {
+				diagnosticSeverityOverrides = {
+					reportUnknownParameterType = false,
+					reportUnknownVariableType = false,
+					reportUnknownLambdaType = false,
+					reportUnknownMemberType = false,
+					reportUnknownArgumentType = false,
+					reportMissingParameterType = false,
+					reportUnusedCallResult = false,
+					reportAny = false,
+				}
+			}
+		}
+	}
 })
 
 vim.api.nvim_create_autocmd("LspAttach", {
-    callback = function(ev)
-        local client = vim.lsp.get_client_by_id(ev.data.client_id)
-        if client ~= nil and client:supports_method("textDocument/completion") then
-            vim.lsp.completion.enable(true, client.id, ev.buf, { autotrigger = false })
-        end
-    end,
+	callback = function(ev)
+		local client = vim.lsp.get_client_by_id(ev.data.client_id)
+		if client ~= nil and client:supports_method("textDocument/completion") then
+			vim.lsp.completion.enable(true, client.id, ev.buf, { autotrigger = false })
+		end
+	end,
 })
 
 -- keybinds
