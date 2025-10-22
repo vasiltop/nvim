@@ -8,6 +8,7 @@ vim.opt.scrolloff = 4
 vim.opt.wrap = false
 vim.opt.autoindent = true
 vim.opt.smartindent = true
+vim.opt.swapfile = false
 
 -- clipboard
 vim.schedule(function()
