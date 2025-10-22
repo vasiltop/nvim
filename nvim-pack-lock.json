@@ -20,6 +20,10 @@
       "rev": "bb764a5",
       "src": "https://github.com/echasnovski/mini.pick"
     },
+    "none-ls.nvim": {
+      "rev": "a96172f",
+      "src": "https://github.com/nvimtools/none-ls.nvim"
+    },
     "nvim-lspconfig": {
       "rev": "e5c61b0",
       "src": "https://github.com/neovim/nvim-lspconfig"
