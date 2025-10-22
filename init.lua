@@ -25,6 +25,7 @@ vim.pack.add({
 	{ src = "https://github.com/echasnovski/mini.extra" },
 	{ src = "https://github.com/echasnovski/mini.pairs" },
 
+	{ src = "https://github.com/folke/lazydev.nvim", ft = "lua" },
 	{ src = "https://github.com/mason-org/mason-lspconfig.nvim" },
 	{ src = "https://github.com/mason-org/mason.nvim" },
 	{ src = "https://github.com/neovim/nvim-lspconfig" },
@@ -48,6 +49,7 @@ require "vague".setup {
 }
 vim.cmd "colorscheme vague"
 
+require "lazydev".setup()
 require "mini.pick".setup()
 require "mini.extra".setup()
 require "mini.pairs".setup()

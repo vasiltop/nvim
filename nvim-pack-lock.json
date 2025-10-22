@@ -1,5 +1,9 @@
 {
   "plugins": {
+    "lazydev.nvim": {
+      "rev": "e28ce52",
+      "src": "https://github.com/folke/lazydev.nvim"
+    },
     "mason-lspconfig.nvim": {
       "rev": "2304ff6",
       "src": "https://github.com/mason-org/mason-lspconfig.nvim"
