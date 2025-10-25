@@ -115,7 +115,7 @@ vim.api.nvim_create_autocmd("LspAttach", {
 -- keybinds
 vim.api.nvim_set_keymap('n', '<C-k>', ':wincmd k<CR>', { noremap = true, silent = true })
 vim.api.nvim_set_keymap('n', '<C-j>', ':wincmd j<CR>', { noremap = true, silent = true })
-vim.api.nvim_set_keymap('n', '<C-h>', ':wincmd h<MiniPick.registryCR>', { noremap = true, silent = true })
+vim.api.nvim_set_keymap('n', '<C-h>', ':wincmd h<CR>', { noremap = true, silent = true })
 vim.api.nvim_set_keymap('n', '<C-l>', ':wincmd l<CR>', { noremap = true, silent = true })
 vim.api.nvim_set_keymap('n', '<Space>h', ':split<CR>', { noremap = true, silent = true })
 vim.api.nvim_set_keymap('n', '<Space>v', ':vsplit<CR>', { noremap = true, silent = true })
