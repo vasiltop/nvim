@@ -34,6 +34,7 @@ vim.pack.add({
 
 	{ src = "https://github.com/nvim-lua/plenary.nvim" },
 	{ src = "https://github.com/nvim-treesitter/nvim-treesitter" },
+	{ src = "https://github.com/windwp/nvim-ts-autotag"},
 	{ src = "https://github.com/stevearc/oil.nvim" },
 	{ src = "https://github.com/vague2k/vague.nvim",             name = "vague" },
 })
@@ -59,6 +60,7 @@ require "mason".setup()
 require "mason-lspconfig".setup()
 
 require "nvim-treesitter".setup()
+require "nvim-ts-autotag".setup()
 require "oil".setup()
 
 local treesitter_ok, treesitter_configs = pcall(require, "nvim-treesitter.configs")
