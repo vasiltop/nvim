@@ -37,6 +37,7 @@ vim.pack.add({
 	{ src = "https://github.com/windwp/nvim-ts-autotag"},
 	{ src = "https://github.com/stevearc/oil.nvim" },
 	{ src = "https://github.com/vague2k/vague.nvim",             name = "vague" },
+	{ src = "https://github.com/ej-shafran/compile-mode.nvim"},
 })
 
 local null_ls = require("null-ls")
@@ -146,6 +147,33 @@ vim.api.nvim_create_autocmd("LspAttach", {
 	end,
 })
 
+-- outputting shell commands in buffer
+local output_buf = nil
+
+function OutputToBuffer(cmd)
+	if output_buf then
+		vim.api.nvim_buf_delete(output_buf, { force = false })
+	end
+
+	output_buf = vim.api.nvim_create_buf(false, true) -- [listed=false, scratch=true]
+	vim.api.nvim_buf_set_name(output_buf, "Command Output")
+
+  local result = vim.fn.systemlist(cmd)
+
+  vim.api.nvim_buf_set_lines(output_buf, 0, -1, false, result)
+
+  vim.cmd("botright split")
+  vim.api.nvim_win_set_buf(0, output_buf)
+end
+
+vim.api.nvim_create_user_command("Run", function(opts)
+  OutputToBuffer(opts.args)
+end, {
+  nargs = "+",
+	complete = "shellcmd",
+  desc = "Run shell command into reusable buffer",
+})
+
 -- keybinds
 vim.api.nvim_set_keymap('n', '<C-k>', ':wincmd k<CR>', { noremap = true, silent = true })
 vim.api.nvim_set_keymap('n', '<C-j>', ':wincmd j<CR>', { noremap = true, silent = true })
@@ -179,3 +207,7 @@ vim.keymap.set("n", "<leader>ca", vim.lsp.buf.code_action, { desc = "Code action
 vim.keymap.set("n", "<leader>d", vim.diagnostic.open_float, { desc = "View diagnostic" })
 
 vim.keymap.set("i", "<C-H>", "<C-W>") -- delete word with ctrl-backspace
+
+vim.keymap.set("n", "<leader>rc", ":Recompile<CR>")
+vim.keymap.set("n", "<leader>ne", ":NextError<CR>")
+vim.keymap.set("n", "<leader>pe", ":PrevError<CR>")

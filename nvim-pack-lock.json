@@ -1,5 +1,9 @@
 {
   "plugins": {
+    "compile-mode.nvim": {
+      "rev": "ce34ad9",
+      "src": "https://github.com/ej-shafran/compile-mode.nvim"
+    },
     "lazydev.nvim": {
       "rev": "e28ce52",
       "src": "https://github.com/folke/lazydev.nvim"
