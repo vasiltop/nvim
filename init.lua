@@ -85,7 +85,7 @@ if treesitter_ok then
 end
 
 -- lsp
-vim.lsp.enable({ "lua_ls", "basedpyright", "rust_analyzer", "vtsls", "ts_ls" })
+vim.lsp.enable({ "lua_ls", "basedpyright", "rust_analyzer", "vtsls", "ts_ls", "clangd" })
 
 vim.lsp.config("basedpyright", {
 	settings = {
@@ -138,6 +138,15 @@ vim.lsp.config('ts_ls', {
 	filetypes = tsserver_filetypes,
 })
 
+vim.lsp.config('clangd', {
+  cmd = {
+    "clangd",
+    "--clang-tidy",
+    "--background-index",
+    "--header-insertion=never",
+  },
+})
+
 vim.api.nvim_create_autocmd("LspAttach", {
 	callback = function(ev)
 		local client = vim.lsp.get_client_by_id(ev.data.client_id)
@@ -186,6 +195,7 @@ vim.keymap.set("n", "<leader>e", ":Oil<CR>")
 vim.keymap.set("n", "<leader>/", ":nohlsearch<CR>")
 
 vim.keymap.set("n", "<leader>pf", ":Pick files tool='rg'<CR>", { desc = "Pick files" })
+vim.keymap.set("n", "<leader>pg", ":Pick grep_live<CR>", { desc = "Pick files" })
 vim.keymap.set("n", "<leader>ph", ":Pick help<CR>", { desc = "Pick help" })
 vim.keymap.set("n", "<leader>pH", ":Pick hl_groups<CR>", { desc = "Pick highlight groups" })
 vim.keymap.set("n", "<leader>pb", ":Pick buffers<CR>", { desc = "Pick buffers" })
