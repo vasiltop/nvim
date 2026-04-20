@@ -183,6 +183,23 @@ end, {
   desc = "Run shell command into reusable buffer",
 })
 
+-- Format on save
+vim.g.format_on_save = true
+
+vim.api.nvim_create_user_command("FormatToggle", function()
+  vim.g.format_on_save = not vim.g.format_on_save
+  print("Format on save: " .. (vim.g.format_on_save and "Enabled" or "Disabled"))
+end, {})
+
+vim.api.nvim_create_autocmd("BufWritePre", {
+  pattern = "*",
+  callback = function()
+    if vim.g.format_on_save then
+      vim.lsp.buf.format({ async = false })
+    end
+  end,
+})
+
 -- keybinds
 vim.api.nvim_set_keymap('n', '<C-k>', ':wincmd k<CR>', { noremap = true, silent = true })
 vim.api.nvim_set_keymap('n', '<C-j>', ':wincmd j<CR>', { noremap = true, silent = true })
