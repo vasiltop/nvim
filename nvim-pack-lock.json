@@ -32,6 +32,10 @@
       "rev": "a96172f",
       "src": "https://github.com/nvimtools/none-ls.nvim"
     },
+    "nvim-dap": {
+      "rev": "45a69eba683a2c448dd9ecfc4de89511f0646b5f",
+      "src": "https://github.com/mfussenegger/nvim-dap"
+    },
     "nvim-lspconfig": {
       "rev": "e5c61b0",
       "src": "https://github.com/neovim/nvim-lspconfig"

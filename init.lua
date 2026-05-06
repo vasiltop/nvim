@@ -31,6 +31,7 @@ vim.pack.add({
 	{ src = "https://github.com/mason-org/mason.nvim" },
 	{ src = "https://github.com/neovim/nvim-lspconfig" },
 	{ src = "https://github.com/nvimtools/none-ls.nvim" },
+	{ src = "https://github.com/mfussenegger/nvim-dap" },
 
 	{ src = "https://github.com/nvim-lua/plenary.nvim" },
 	{ src = "https://github.com/nvim-treesitter/nvim-treesitter" },
@@ -39,6 +40,46 @@ vim.pack.add({
 	{ src = "https://github.com/vague2k/vague.nvim",             name = "vague" },
 	{ src = "https://github.com/ej-shafran/compile-mode.nvim"},
 })
+
+-- godot
+local paths_to_check = {'/', '/../'}
+local is_godot_project = false
+local godot_project_path = ''
+local cwd = vim.fn.getcwd()
+
+-- iterate over paths and check
+for key, value in pairs(paths_to_check) do
+    if vim.uv.fs_stat(cwd .. value .. 'project.godot') then
+        is_godot_project = true
+        godot_project_path = cwd .. value
+        break
+    end
+end
+
+local dap = require('dap')
+
+dap.adapters.godot = {
+  type = "server",
+  host = '127.0.0.1',
+  port = 6006, -- Default for Godot 4.x. Use 6007 if 6006 doesn't work.
+}
+
+dap.configurations.gdscript = {
+  {
+    type = "godot",
+    request = "launch",
+    name = "Launch Scene",
+    project = "${workspaceFolder}",
+    launch_scene = true,
+  },
+}
+
+-- check if server is already running in godot project path
+local is_server_running = vim.uv.fs_stat(godot_project_path .. '/server.pipe')
+-- start server, if not already running
+if is_godot_project and not is_server_running then
+    vim.fn.serverstart(godot_project_path .. '/server.pipe')
+end
 
 local null_ls = require("null-ls")
 null_ls.setup({
@@ -85,7 +126,16 @@ if treesitter_ok then
 end
 
 -- lsp
-vim.lsp.enable({ "lua_ls", "basedpyright", "rust_analyzer", "vtsls", "ts_ls", "clangd" })
+vim.lsp.enable({ "lua_ls", "basedpyright", "rust_analyzer", "vtsls", "ts_ls", "clangd", "gdscript" })
+
+local port = os.getenv 'GDScript_Port' or '6005'
+local cmd = vim.lsp.rpc.connect('127.0.0.1', tonumber(port))
+
+vim.lsp.config("gdscript", {
+  cmd = cmd,
+  filetypes = { 'gd', 'gdscript', 'gdscript3' },
+  root_markers = { 'project.godot', '.git' },
+})
 
 vim.lsp.config("basedpyright", {
 	settings = {
@@ -184,7 +234,7 @@ end, {
 })
 
 -- Format on save
-vim.g.format_on_save = true
+vim.g.format_on_save = false
 
 vim.api.nvim_create_user_command("FormatToggle", function()
   vim.g.format_on_save = not vim.g.format_on_save
@@ -238,3 +288,9 @@ vim.keymap.set("i", "<C-H>", "<C-W>") -- delete word with ctrl-backspace
 vim.keymap.set("n", "<leader>rc", ":Recompile<CR>")
 vim.keymap.set("n", "<leader>ne", ":NextError<CR>")
 vim.keymap.set("n", "<leader>pe", ":PrevError<CR>")
+
+-- Debugging (DAP)
+vim.keymap.set("n", "<leader>b", function() dap.toggle_breakpoint() end, { desc = "Toggle Breakpoint" })
+vim.keymap.set("n", "<F5>", function() dap.continue() end, { desc = "Start/Continue Debugging" })
+vim.keymap.set("n", "<F10>", function() dap.step_over() end, { desc = "Step Over" })
+vim.keymap.set("n", "<F11>", function() dap.step_into() end, { desc = "Step Into" })
