@@ -1,0 +1,7 @@
+require("config.plugins.colorscheme")
+require("config.plugins.lazydev")
+require("config.plugins.mini")
+require("config.plugins.mason")
+require("config.plugins.null-ls")
+require("config.plugins.treesitter")
+require("config.plugins.oil")
