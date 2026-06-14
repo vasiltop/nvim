@@ -35,7 +35,6 @@ vim.pack.add({
 
 	{ src = "https://github.com/nvim-lua/plenary.nvim" },
 	{ src = "https://github.com/nvim-treesitter/nvim-treesitter" },
-	{ src = "https://github.com/windwp/nvim-ts-autotag"},
 	{ src = "https://github.com/stevearc/oil.nvim" },
 	{ src = "https://github.com/vague2k/vague.nvim",             name = "vague" },
 	{ src = "https://github.com/ej-shafran/compile-mode.nvim"},
@@ -102,14 +101,13 @@ require "mason".setup()
 require "mason-lspconfig".setup()
 
 require "nvim-treesitter".setup()
-require "nvim-ts-autotag".setup()
 require "oil".setup()
 
 local treesitter_ok, treesitter_configs = pcall(require, "nvim-treesitter.configs")
 if treesitter_ok then
 	treesitter_configs.setup {
 		ensure_installed = { "c", "cpp", "lua", "python", "typescript",
-			"vim", "rust", "vue", "sql", "html", "css", "bash" },
+			"vim", "rust", "vue", "sql", "html", "css", "bash", "gdscript" },
 		sync_install = true,
 		ignore_install = {},
 		auto_install = true,
@@ -124,9 +122,6 @@ if treesitter_ok then
 		}
 	}
 end
-
--- lsp
-vim.lsp.enable({ "lua_ls", "basedpyright", "rust_analyzer", "vtsls", "ts_ls", "clangd", "gdscript" })
 
 local port = os.getenv 'GDScript_Port' or '6005'
 local cmd = vim.lsp.rpc.connect('127.0.0.1', tonumber(port))
@@ -196,6 +191,9 @@ vim.lsp.config('clangd', {
     "--header-insertion=never",
   },
 })
+
+-- lsp
+vim.lsp.enable({ "lua_ls", "basedpyright", "rust_analyzer", "vtsls", "ts_ls", "clangd", "gdscript" })
 
 vim.api.nvim_create_autocmd("LspAttach", {
 	callback = function(ev)
@@ -292,5 +290,5 @@ vim.keymap.set("n", "<leader>pe", ":PrevError<CR>")
 -- Debugging (DAP)
 vim.keymap.set("n", "<leader>b", function() dap.toggle_breakpoint() end, { desc = "Toggle Breakpoint" })
 vim.keymap.set("n", "<F5>", function() dap.continue() end, { desc = "Start/Continue Debugging" })
-vim.keymap.set("n", "<F10>", function() dap.step_over() end, { desc = "Step Over" })
-vim.keymap.set("n", "<F11>", function() dap.step_into() end, { desc = "Step Into" })
+vim.keymap.set("n", "<leader>so", function() dap.step_over() end, { desc = "Step Over" })
+vim.keymap.set("n", "<leader>si", function() dap.step_into() end, { desc = "Step Into" })
