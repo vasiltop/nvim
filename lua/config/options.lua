@@ -12,7 +12,3 @@ vim.opt.smartindent = true
 vim.opt.swapfile = false
 vim.opt.ruler = false
 vim.opt.cmdheight = 0
-
-vim.schedule(function()
-	vim.opt.clipboard = "unnamedplus"
-end)
