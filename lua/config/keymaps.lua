@@ -51,3 +51,6 @@ vim.keymap.set("n", "<leader>b", function() dap.toggle_breakpoint() end, { desc 
 vim.keymap.set("n", "<F5>", function() dap.continue() end, { desc = "Start/Continue Debugging" })
 vim.keymap.set("n", "<leader>so", function() dap.step_over() end, { desc = "Step Over" })
 vim.keymap.set("n", "<leader>si", function() dap.step_into() end, { desc = "Step Into" })
+
+-- neogit
+vim.keymap.set("n", "<leader>ng", ":Neogit<CR>")

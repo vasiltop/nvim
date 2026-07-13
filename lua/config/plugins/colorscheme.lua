@@ -1,4 +1,5 @@
-require("vague").setup({
+require("flexoki").setup({
 	transparent = true,
 })
-vim.cmd("colorscheme vague")
+
+vim.cmd("colorscheme flexoki")

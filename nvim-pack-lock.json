@@ -4,6 +4,14 @@
       "rev": "ce34ad9",
       "src": "https://github.com/ej-shafran/compile-mode.nvim"
     },
+    "flexoki": {
+      "rev": "8d723bac4a9ac46adfdf99d42155286977aac72a",
+      "src": "https://github.com/kepano/flexoki"
+    },
+    "flexoki-neovim": {
+      "rev": "c3e2251e813d29d885a7cbbe9808a7af234d845d",
+      "src": "https://github.com/kepano/flexoki-neovim"
+    },
     "lazydev.nvim": {
       "rev": "e28ce52",
       "src": "https://github.com/folke/lazydev.nvim"
@@ -27,6 +35,14 @@
     "mini.pick": {
       "rev": "bb764a5",
       "src": "https://github.com/echasnovski/mini.pick"
+    },
+    "neogit": {
+      "rev": "a0847c4bea5a5f92a36e3f3bf7da99d7d685d3ac",
+      "src": "https://github.com/neogitorg/neogit"
+    },
+    "no-clown-fiesta.nvim": {
+      "rev": "04b808e9769ded988089772ffcaf08d92d75d927",
+      "src": "https://github.com/aktersnurra/no-clown-fiesta.nvim"
     },
     "none-ls.nvim": {
       "rev": "a96172f",
