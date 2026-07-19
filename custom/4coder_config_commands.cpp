@@ -641,6 +641,10 @@ CUSTOM_DOC("Space leader dispatch.")
         {
             open_panel_vsplit(app);
         }break;
+        case KeyCode_Q:
+        {
+            close_panel(app);
+        }break;
         case KeyCode_P:
         {
             Key_Code k2 = vim_read_key(app);

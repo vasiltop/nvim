@@ -91,6 +91,7 @@ linewise-aware register drives `p`/`P` and also posts to the system clipboard.
 |---|---|---|
 | `Space e` | open / create file | `<Space>e` (`:Ex`) |
 | `Space h` / `Space v` | horizontal / vertical split | `:split` / `:vsplit` |
+| `Space q` | close the active panel | `<C-w>q` |
 | `Space p f` | open file | mini.pick files |
 | `Space p g` | search in files | mini.pick grep |
 | `Space p b` | switch buffer | mini.pick buffers |

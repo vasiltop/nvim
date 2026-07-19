@@ -35,6 +35,9 @@ custom_layer_init(Application_Links *app){
     default_framework_init(app);
     set_all_default_hooks(app);
 
+    // mode-aware cursor + mode indicator in the file bar
+    set_custom_hook(app, HookID_RenderCaller, vim_render_caller);
+
     // route each keystroke through our per-mode map selector
     implicit_map_function = vim_implicit_map;
 
