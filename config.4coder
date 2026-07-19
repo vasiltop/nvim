@@ -1,0 +1,61 @@
+// config.4coder - user settings for the ported Neovim config.
+//
+// Options ported from the original lua/config/options.lua:
+//   tabstop/shiftwidth = 2   -> indent_width / default_tab_width = 2
+//   nu = true                -> show_line_number_margins = true
+//   wrap = false             -> code/output wrapping disabled
+//   autoindent/smartindent   -> automatically_indent_text_on_save + virtual whitespace
+//
+// The key bindings, modal editing and theme all live in the compiled custom
+// layer (custom_4coder.*), so `mapping` is left empty here on purpose.
+
+// Command Mapping - empty: the custom layer installs its own Vim mapping.
+mapping = "";
+mode = "4coder";
+bind_by_physical_key = true;
+
+// UI
+use_file_bars = true;
+hide_file_bar_in_ui = true;
+use_error_highlight = true;
+use_jump_highlight = true;
+use_scope_highlight = true;
+use_paren_helper = true;
+use_comment_keywords = true;
+lister_whole_word_backspace_when_modified = true;
+show_line_number_margins = true;   // vim.opt.nu = true
+enable_output_wrapping = false;    // vim.opt.wrap = false
+
+enable_undo_fade_out = true;
+cursor_roundness = 0;
+mark_thickness = 2;
+lister_roundness = 0;
+
+// Code Wrapping
+treat_as_code = ".cpp.c.hpp.h.cc.cs.java.rs.glsl.m.mm.py.gd";
+enable_virtual_whitespace = true;
+virtual_whitespace_regular_indent = 2;   // shiftwidth = 2
+enable_code_wrapping = false;            // vim.opt.wrap = false
+
+// vim.opt.autoindent / smartindent
+automatically_indent_text_on_save = true;
+automatically_save_changes_on_build = true;
+automatically_load_project = false;
+
+// Indentation (tabstop = shiftwidth = 2, no expandtab -> tabs)
+indent_with_tabs = true;
+indent_width = 2;
+default_tab_width = 2;
+
+// Theme - the custom layer applies the Flexoki palette at startup regardless,
+// this is only the fallback name.
+default_theme_name = "flexoki";
+
+// Font
+default_font_name = "liberation-mono.ttf";
+default_font_size = 16;
+default_font_hinting = false;
+default_font_aa_mode = "8bit";
+
+user_name = "not-set";
+lalt_lctrl_is_altgr = false;

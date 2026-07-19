@@ -1,0 +1,10 @@
+# Build output
+/build/
+custom_4coder.so
+custom_4coder.dll
+custom_4coder.dylib
+*.dSYM/
+
+# Metadata generator intermediates
+4coder_command_metadata.i
+metadata_generator
