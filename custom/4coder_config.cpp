@@ -55,18 +55,10 @@ custom_layer_init(Application_Links *app){
 #endif
     setup_essential_mapping(&framework_mapping, global_map_id, file_map_id, code_map_id);
 
-    // Create the Vim maps now so keys_vim_normal / _insert / _visual EXIST for the
-    // very first dispatched event. Every input (including the startup Core event) is
-    // routed through vim_implicit_map, which selects one of these maps; the startup
-    // command is found by walking that map's parent chain up to keys_global. If the
-    // maps did not exist yet, the startup event would resolve to nothing and 4coder
-    // would come up as a bare *scratch* buffer with no layout.
+    // Install the Vim maps up front so the startup Core event resolves against them.
     setup_vim_maps();
 
-    // Override the startup hook: vim_startup does everything default_startup does,
-    // then reinstalls our Vim maps. default_4coder_initialize (run inside startup)
-    // calls mapping_init, which zeroes the whole mapping and rebuilds only 4coder's
-    // own maps; reinstalling afterwards is what keeps the Vim maps alive.
+    // vim_startup reinstalls the maps after default_4coder_initialize wipes the mapping.
     {
         MappingScope();
         SelectMapping(&framework_mapping);

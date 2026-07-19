@@ -391,8 +391,7 @@ vim_apply_operator(Application_Links *app, View_ID view, Buffer_ID buffer,
 
     Range_i64 edit_range = range;
     if (op == VimOp_Change && linewise){
-        // linewise change keeps the line: empty its text but preserve the
-        // trailing newline so we don't merge into the next line.
+        // linewise change empties the line but keeps its trailing newline
         if (edit_range.end > edit_range.start){
             u8 last = 0;
             buffer_read_range(app, buffer, Ii64(edit_range.end - 1, edit_range.end), &last);

@@ -199,10 +199,7 @@ setup_vim_insert_map(Mapping *mapping, i64 code_id, i64 insert_id){
 #endif
 }
 
-// Install the three Vim maps into the framework mapping. Called from vim_startup
-// right after default_4coder_initialize has finished (re)building the mapping, so
-// our maps sit on top of 4coder's freshly-built keys_global / keys_code and are
-// not wiped by the mapping_init that startup performs.
+// Install the three Vim maps on top of 4coder's freshly-built mapping.
 function void
 setup_vim_maps(void){
     String_ID global_map_id = vars_save_string_lit("keys_global");
@@ -215,11 +212,7 @@ setup_vim_maps(void){
     setup_vim_insert_map(&framework_mapping, code_map_id, insert_id);
 }
 
-// Startup hook. Mirrors the stock default_startup exactly, but installs our Vim
-// maps immediately after default_4coder_initialize has (re)built framework_mapping.
-// default_4coder_initialize calls mapping_init, which zeroes the whole mapping and
-// then rebuilds only 4coder's own maps; installing ours here means they land on top
-// of the finished mapping and are never wiped afterwards.
+// Stock default_startup plus setup_vim_maps() after default_4coder_initialize.
 CUSTOM_COMMAND_SIG(vim_startup)
 CUSTOM_DOC("Vim custom-layer startup: default startup + install Vim key maps")
 {
