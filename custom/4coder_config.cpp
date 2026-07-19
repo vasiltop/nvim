@@ -55,13 +55,24 @@ custom_layer_init(Application_Links *app){
 #endif
     setup_essential_mapping(&framework_mapping, global_map_id, file_map_id, code_map_id);
 
-    // Our Vim maps.
-    String_ID normal_id = vars_save_string_lit("keys_vim_normal");
-    String_ID insert_id = vars_save_string_lit("keys_vim_insert");
-    String_ID visual_id = vars_save_string_lit("keys_vim_visual");
-    setup_vim_normal_map(&framework_mapping, global_map_id, normal_id);
-    setup_vim_visual_map(&framework_mapping, global_map_id, visual_id);
-    setup_vim_insert_map(&framework_mapping, code_map_id, insert_id);
+    // Create the Vim maps now so keys_vim_normal / _insert / _visual EXIST for the
+    // very first dispatched event. Every input (including the startup Core event) is
+    // routed through vim_implicit_map, which selects one of these maps; the startup
+    // command is found by walking that map's parent chain up to keys_global. If the
+    // maps did not exist yet, the startup event would resolve to nothing and 4coder
+    // would come up as a bare *scratch* buffer with no layout.
+    setup_vim_maps();
+
+    // Override the startup hook: vim_startup does everything default_startup does,
+    // then reinstalls our Vim maps. default_4coder_initialize (run inside startup)
+    // calls mapping_init, which zeroes the whole mapping and rebuilds only 4coder's
+    // own maps; reinstalling afterwards is what keeps the Vim maps alive.
+    {
+        MappingScope();
+        SelectMapping(&framework_mapping);
+        SelectMap(global_map_id);
+        BindCore(vim_startup, CoreCode_Startup);
+    }
 }
 
 #endif //FCODER_CONFIG_CPP

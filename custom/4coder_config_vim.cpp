@@ -132,11 +132,12 @@ vim_line_end(Application_Links *app, Buffer_ID buffer, i64 pos){
 // Reads a single character key (a-z, symbols) for f/F/t/T; returns 0 on abort.
 function u8
 vim_read_char_key(Application_Links *app){
-    User_Input in = get_next_input(app, EventPropertyGroup_Any, EventProperty_Escape);
+    User_Input in = get_next_input(app, EventProperty_AnyKey, EventProperty_Escape);
     if (in.abort){
         return(0);
     }
-    String_Const_u8 str = to_writable(&in);
+    Input_Event text_ev = event_next_text_event(&in.event);
+    String_Const_u8 str = to_writable(&text_ev);
     if (str.str != 0 && str.size > 0){
         return(str.str[0]);
     }
@@ -387,8 +388,22 @@ vim_apply_operator(Application_Links *app, View_ID view, Buffer_ID buffer,
     // delete or change
     vim_set_register(text, linewise);
     clipboard_post(0, text);
-    buffer_replace_range(app, buffer, range, string_u8_empty);
-    view_set_cursor_and_preferred_x(app, view, seek_pos(range.first));
+
+    Range_i64 edit_range = range;
+    if (op == VimOp_Change && linewise){
+        // linewise change keeps the line: empty its text but preserve the
+        // trailing newline so we don't merge into the next line.
+        if (edit_range.end > edit_range.start){
+            u8 last = 0;
+            buffer_read_range(app, buffer, Ii64(edit_range.end - 1, edit_range.end), &last);
+            if (last == '\n'){
+                edit_range.end -= 1;
+            }
+        }
+    }
+
+    buffer_replace_range(app, buffer, edit_range, string_u8_empty);
+    view_set_cursor_and_preferred_x(app, view, seek_pos(edit_range.first));
 
     if (op == VimOp_Change){
         vim_set_mode(app, view, VimMode_Insert);
@@ -405,7 +420,7 @@ vim_operator_pending(Application_Links *app, Vim_Operator op, Key_Code op_key){
 
     i32 count = vim_take_count();
 
-    User_Input in = get_next_input(app, EventPropertyGroup_Any, EventProperty_Escape);
+    User_Input in = get_next_input(app, EventProperty_AnyKey, EventProperty_Escape);
     if (in.abort || in.event.kind != InputEventKind_KeyStroke){
         return;
     }
@@ -416,7 +431,7 @@ vim_operator_pending(Application_Links *app, Vim_Operator op, Key_Code op_key){
     if (code >= KeyCode_1 && code <= KeyCode_9 && !has_modifier(&mods, KeyCode_Shift)){
         i32 acc = (i32)(code - KeyCode_0);
         for (;;){
-            User_Input d = get_next_input(app, EventPropertyGroup_Any, EventProperty_Escape);
+            User_Input d = get_next_input(app, EventProperty_AnyKey, EventProperty_Escape);
             if (d.abort || d.event.kind != InputEventKind_KeyStroke){ return; }
             Key_Code dc = d.event.key.code;
             if (dc >= KeyCode_0 && dc <= KeyCode_9 && !has_modifier(&d.event.key.modifiers, KeyCode_Shift)){
@@ -434,7 +449,7 @@ vim_operator_pending(Application_Links *app, Vim_Operator op, Key_Code op_key){
     b32 g_prefix = false;
     if (code == KeyCode_G && !has_modifier(&mods, KeyCode_Shift)){
         // could be 'gg' target; peek next key
-        User_Input g2 = get_next_input(app, EventPropertyGroup_Any, EventProperty_Escape);
+        User_Input g2 = get_next_input(app, EventProperty_AnyKey, EventProperty_Escape);
         if (g2.abort){ return; }
         if (g2.event.kind == InputEventKind_KeyStroke && g2.event.key.code == KeyCode_G){
             g_prefix = true;

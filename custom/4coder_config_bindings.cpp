@@ -199,4 +199,52 @@ setup_vim_insert_map(Mapping *mapping, i64 code_id, i64 insert_id){
 #endif
 }
 
+// Install the three Vim maps into the framework mapping. Called from vim_startup
+// right after default_4coder_initialize has finished (re)building the mapping, so
+// our maps sit on top of 4coder's freshly-built keys_global / keys_code and are
+// not wiped by the mapping_init that startup performs.
+function void
+setup_vim_maps(void){
+    String_ID global_map_id = vars_save_string_lit("keys_global");
+    String_ID code_map_id   = vars_save_string_lit("keys_code");
+    String_ID normal_id = vars_save_string_lit("keys_vim_normal");
+    String_ID insert_id = vars_save_string_lit("keys_vim_insert");
+    String_ID visual_id = vars_save_string_lit("keys_vim_visual");
+    setup_vim_normal_map(&framework_mapping, global_map_id, normal_id);
+    setup_vim_visual_map(&framework_mapping, global_map_id, visual_id);
+    setup_vim_insert_map(&framework_mapping, code_map_id, insert_id);
+}
+
+// Startup hook. Mirrors the stock default_startup exactly, but installs our Vim
+// maps immediately after default_4coder_initialize has (re)built framework_mapping.
+// default_4coder_initialize calls mapping_init, which zeroes the whole mapping and
+// then rebuilds only 4coder's own maps; installing ours here means they land on top
+// of the finished mapping and are never wiped afterwards.
+CUSTOM_COMMAND_SIG(vim_startup)
+CUSTOM_DOC("Vim custom-layer startup: default startup + install Vim key maps")
+{
+    ProfileScope(app, "vim startup");
+    User_Input input = get_current_input(app);
+    if (match_core_code(&input, CoreCode_Startup)){
+        String_Const_u8_Array file_names = input.event.core.file_names;
+        load_themes_default_folder(app);
+        default_4coder_initialize(app, file_names);
+        setup_vim_maps();
+        default_4coder_side_by_side_panels(app, file_names);
+        b32 auto_load = def_get_config_b32(vars_save_string_lit("automatically_load_project"));
+        if (auto_load){
+            load_project(app);
+        }
+    }
+
+    {
+        def_audio_init();
+    }
+
+    {
+        def_enable_virtual_whitespace = def_get_config_b32(vars_save_string_lit("enable_virtual_whitespace"));
+        clear_all_layouts(app);
+    }
+}
+
 #endif //FCODER_CONFIG_BINDINGS_CPP

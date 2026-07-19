@@ -158,7 +158,7 @@ CUSTOM_DOC("Accumulate a numeric count (1-9).")
 CUSTOM_COMMAND_SIG(vim_g_prefix)
 CUSTOM_DOC("Handle the g-prefixed commands (gg, gd).")
 {
-    User_Input in = get_next_input(app, EventPropertyGroup_Any, EventProperty_Escape);
+    User_Input in = get_next_input(app, EventProperty_AnyKey, EventProperty_Escape);
     if (in.abort || in.event.kind != InputEventKind_KeyStroke){
         return;
     }
@@ -346,15 +346,13 @@ CUSTOM_DOC("Paste the register after the cursor / below the line (p).")
     if (vim_register_linewise){
         i64 line = get_line_number_from_pos(app, buffer, pos);
         i64 insert_at = get_line_side_pos(app, buffer, line, Side_Max);
-        i64 size = buffer_get_size(app, buffer);
         Scratch_Block scratch(app);
-        String_Const_u8 text = vim_register;
-        if (insert_at >= size){
-            text = push_u8_stringf(scratch, "\n%.*s", string_expand(vim_register));
-            if (text.size > 0 && text.str[text.size-1] == '\n'){ text.size -= 1; }
-        }
+        String_Const_u8 body = vim_register;
+        while (body.size > 0 && body.str[body.size-1] == '\n'){ body.size -= 1; }
+        String_Const_u8 text = push_u8_stringf(scratch, "\n%.*s", string_expand(body));
         buffer_replace_range(app, buffer, Ii64(insert_at, insert_at), text);
-        view_set_cursor_and_preferred_x(app, view, seek_pos(insert_at + 1));
+        i64 new_line_start = get_line_side_pos(app, buffer, line + 1, Side_Min);
+        view_set_cursor_and_preferred_x(app, view, seek_pos(new_line_start));
     }
     else{
         i64 le = vim_line_end(app, buffer, pos);
@@ -619,7 +617,7 @@ CUSTOM_DOC("Compile the current file (leader rc). g++/gcc for C/C++, make -k oth
 
 function Key_Code
 vim_read_key(Application_Links *app){
-    User_Input in = get_next_input(app, EventPropertyGroup_Any, EventProperty_Escape);
+    User_Input in = get_next_input(app, EventProperty_AnyKey, EventProperty_Escape);
     if (in.abort || in.event.kind != InputEventKind_KeyStroke){
         return(0);
     }
