@@ -1,5 +1,0 @@
-vim.api.nvim_set_hl(0, "NeogitDiffAdd", { fg = "#a6e3a1", bg = "#1e2e24", bold = true })
-vim.api.nvim_set_hl(0, "NeogitDiffAddHighlight", { fg = "#a6e3a1", bg = "#273f2b", bold = true })
-vim.api.nvim_set_hl(0, "NeogitDiffDelete", { fg = "#f38ba8", bg = "#331c22", bold = true })
-vim.api.nvim_set_hl(0, "NeogitDiffDeleteHighlight", { fg = "#f38ba8", bg = "#47232b", bold = true })
-vim.api.nvim_set_hl(0, "NeogitDiffContextHighlight", { bg = "#2f3542" })
