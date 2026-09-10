@@ -1,5 +1,6 @@
-require("flexoki").setup({
-	transparent = true,
+require("catppuccin").setup({
+	flavour = "latte",
+	transparent_background = true,
 })
 
-vim.cmd("colorscheme flexoki")
+vim.cmd("colorscheme catppuccin")

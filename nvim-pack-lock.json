@@ -1,5 +1,9 @@
 {
   "plugins": {
+    "catppuccin": {
+      "rev": "edefef779ab08ce1a4a404713e3012b0d202bd35",
+      "src": "https://github.com/catppuccin/nvim"
+    },
     "compile-mode.nvim": {
       "rev": "ce34ad9",
       "src": "https://github.com/ej-shafran/compile-mode.nvim"
@@ -57,7 +61,7 @@
       "src": "https://github.com/neovim/nvim-lspconfig"
     },
     "nvim-treesitter": {
-      "rev": "42fc28ba",
+      "rev": "4916d6592ede8c07973490d9322f187e07dfefac",
       "src": "https://github.com/nvim-treesitter/nvim-treesitter"
     },
     "nvim-ts-autotag": {
