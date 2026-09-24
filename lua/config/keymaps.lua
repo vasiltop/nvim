@@ -17,6 +17,27 @@ vim.api.nvim_set_keymap("n", "<Space>v", ":vsplit<CR>", { noremap = true, silent
 vim.keymap.set("n", "<leader>e", ":Oil<CR>")
 vim.keymap.set("n", "<leader>/", ":nohlsearch<CR>")
 
+vim.keymap.set("n", "<leader>sc", function()
+	local dir
+	local ok, oil = pcall(require, "oil")
+	if ok and vim.bo.filetype == "oil" then
+		dir = oil.get_current_dir()
+	else
+		local path = vim.api.nvim_buf_get_name(0)
+		if path ~= "" then
+			dir = vim.fn.fnamemodify(path, ":p:h")
+		end
+	end
+
+	if not dir or dir == "" then
+		vim.notify("No directory for current buffer", vim.log.levels.WARN)
+		return
+	end
+
+	vim.fn.chdir(dir)
+	vim.notify("cwd: " .. vim.fn.getcwd())
+end, { desc = "Set cwd to current file/oil directory" })
+
 -- mini.pick
 vim.keymap.set("n", "<leader>pf", ":Pick files tool='rg'<CR>", { desc = "Pick files" })
 vim.keymap.set("n", "<leader>pg", ":Pick grep_live<CR>", { desc = "Pick grep" })
